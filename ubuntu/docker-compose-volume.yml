@@ -1,0 +1,23 @@
+version: '3.8'
+name: 'volume-external'
+services:
+  master:
+    image: ubuntu:22.04
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - sleep infinity
+    volumes:
+      - vault:/root/vault
+  slave:
+    image: ubuntu:22.04
+    entrypoint: /bin/bash
+    command:
+    - -c
+    - sleep infinity
+    volumes:
+    - vault:/root/vault:ro #read only
+volumes:
+  vault:
+    external: true
+    name: "vault"

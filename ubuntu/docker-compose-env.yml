@@ -1,0 +1,10 @@
+#project-1.yml
+version: '3.8'
+services:
+  ubuntu:
+    image: ubuntu:22.04
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - echo 'env from "$FROM"' #env file 보다 host 의 env 가 우선순위가 높다.
+    restart: no
