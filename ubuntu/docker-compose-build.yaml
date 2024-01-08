@@ -1,4 +1,13 @@
-FROM ubuntu:latest
-LABEL authors="KDP"
+version: '3.8'
 
-ENTRYPOINT ["top", "-b"]
+services:
+  ubuntu:
+    image: cloudwave:buildexample.1
+    build:
+      context: ../buildproject
+      dockerfile: "Dockerfile"
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - "sleep 3600"
+    restart: no

@@ -1,0 +1,38 @@
+version: "3.8"
+name: "cloudwave_terraform"
+
+services:
+  terraform:
+    image: matenduel/cloudwave:practice.v1
+    command:
+      - /bin/bash
+      - -c
+      - "mkdir -p /terraform && chmod -R 777 /terraform && sleep infinity"
+    environment:
+      TF_VAR_pem_location: "/root/.ssh"
+      # AWS Credentials
+      AWS_ACCESS_KEY_ID: "ASIAYVAXTN3OUSGEU2PK"
+      AWS_SECRET_ACCESS_KEY: "0R75baU6PihKskTgSs+c0ytdFEYWzLvVM66KJXFh"
+      AWS_SESSION_TOKEN: "IQoJb3JpZ2luX2VjEDEaDmFwLW5vcnRoZWFzdC0yIkcwRQIhAKRqsgRYNK2kmUjt5QM/HM9bPpNDd37y+LZ/Amb+9mV3AiBy2kGdVNNh2l8iXwKslrHK2GQKCHIQ0vin1zisCZx8fCqUAwjK//////////8BEAAaDDU5NDkwMjQ3ODU1NyIMx7j1rxtvRTWeuqf3KugChxhLGYGDKkZJlbuSXPeRAAslJHZXejS/5Podh4KQFvQDrKyQ8VDcwVYo/Hj/JsjwVLwspnu8KIyVGp8KWOfp51xNBHQfYrbDlaVzMmP4/+k1Tgt+B/6PHx1G0jSfjACH+SAVixq0++N8FfdhDf6nHxbROiUquQ3jBhBGQeoQZjR7qfZM23M98Cu/EkYloU/SXj6pTG9qTHG4TlcGJqUCli/K2c2ANlAvDG7cYj1QK/D1cY0j+HQkYZndAOpR+pNPF0eIyrqCSNJirKQmDvxEGGstCpWhkZNzvTeXF+F5YjVmoIO57/p4ZPfQ0mbC6AtvVQuCGls5psP/WMmeIPl6CHlhGgYxWtx5apxQLcNjJmPKehVtcASZy5AahzYzWzePqo7FTKDsUxFhLOH24jZt0JWD2GOOU/x3cKfhlu0ThFfjlJAth+PQLnBC8yz4YAQHYwaklUsS11Tc/eznhbUw0LMSBTK+vVgbMLOW7awGOqYBus04fO0WDWHhBsRzMjc1Js70aTu3f4a09MYJ9Y2f1Pn9hdHDGNcPfRKQSJxPQfpKQH5EZpYnHbgk9H7rKlLbicreBeLD13DtX7lY03WQjE1yRr/jh4H4yqYcppR8MBp9WoPPXW9cXWrQBZZWYcDDaqb/vwKvWdCiZeJSVOgm+AHKuok+hg+cnNGDU0pDayDKzaxgwmYifn/NwkHiW6ksa8TvmokTAA=="
+      AWS_REGION: "ap-northeast-2"
+    volumes:
+      - ./src:/terraform
+      - credential:/root/.ssh
+
+  gitsync:
+    image: registry.k8s.io/git-sync/git-sync:v4.1.0
+    environment:
+      GITSYNC_REPO: https://github.com/matenduel/cloudwave
+      GITSYNC_ROOT: /tmp/git
+      GITSYNC_REF: main
+      GITSYNC_DEPTH: 1
+      GITSYNC_ONE_TIME: 1
+    volumes:
+      - ./src:/tmp/git
+    depends_on:
+      terraform:
+        condition: service_started
+
+volumes:
+  credential:
+    external: true

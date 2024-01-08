@@ -4,7 +4,7 @@ services:
   ubuntu:
     image: cloudwave:example.1
     build:
-      dockerfile: "Dockerfile"
+      dockerfile: "server.dockerfile"
     entrypoint: /bin/bash
     command:
       - -c
@@ -14,5 +14,5 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - "8090:8090"
+      - "80:80"
     restart: always

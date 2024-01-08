@@ -7,6 +7,11 @@ services:
     environment:
       POSTGRES_PASSWORD_FILE: /run/secrets/psql_pw
 
+    ports:
+      - target: 5432
+        published: 5432
+        protocol: tcp
+
     networks:
         private:
           aliases:

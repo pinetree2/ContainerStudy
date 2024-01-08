@@ -2,7 +2,8 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-
+nw/.env
+s3-tf/terraform.yaml
 ### Eclipse ###
 .apt_generated
 .classpath
