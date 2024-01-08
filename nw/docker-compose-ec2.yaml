@@ -1,0 +1,52 @@
+version: "3.8"
+services:
+  psql:
+    image: postgres:16.1-bullseye
+    expose:
+      - 5432
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/psql_pw
+
+    networks:
+        private:
+          aliases:
+            - psql
+            - db
+    volumes:
+      - psql_data:/var/lib/postgresql/data
+    secrets:
+      - psql_pw
+
+
+
+    restart: no
+
+  pgadmin:
+    image: dpage/pgadmin4:7.4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@sample.com
+      PGADMIN_DEFAULT_PASSWORD: SuperSecret
+
+    networks:
+        private:
+
+
+    ports:
+      - target: 80
+        published: 8000
+        protocol: tcp
+
+    depends_on:
+      - psql
+
+secrets:
+    psql_pw:
+        file: ./psql_pw.txt
+
+networks:
+  private:
+
+
+volumes:
+  psql_data:
+

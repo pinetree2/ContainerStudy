@@ -1,0 +1,33 @@
+#docer-compose.yml
+version: '3.8'
+name: 'cloudwave-tf'
+services:
+  gitsync:
+    image: registry.k8s.io/git-sync/git-sync:v4.1.0
+    container_name: "gitsync2"
+    volumes:
+      - source_code3:/tmp:rw
+    environment:
+      - GITSYNC_REPO=https://github.com/matenduel/cloudwave
+      - GITSYNC_ROOT=/tmp/git
+      - GITSYNC_REF=main
+      - GITSYNC_DEPTH=1
+
+  terraform:
+    image: cloudwave:practice.v1
+    container_name: "tf"
+    entrypoint:
+      - /bin/sh
+    command:
+      - -c
+      - sleep infinity
+    volumes:
+      - source_code3:/terraform:rw
+    env_file: .env
+    depends_on:
+      - gitsync
+    working_dir: /terraform
+
+volumes:
+  source_code3:
+    external: true

@@ -1,0 +1,10 @@
+#docker-compose.yaml
+version: "3.8"
+name: 'network-host'
+
+services:
+  ubuntu:
+    image: ubuntu:22.04
+    tty: true
+    stdin_open: true
+    network_mode: host

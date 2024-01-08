@@ -1,0 +1,16 @@
+# docker-compose.yaml
+version: '3.8'
+name: 'network-alias'
+services:
+  ubuntu:
+    image: ubuntu:22.04
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - sleep infinity
+    networks:
+      private:
+        aliases:
+          - server-song
+networks:
+  private:
